@@ -1,14 +1,29 @@
 cmake_minimum_required(VERSION 3.2)
-project(gauntlet)
+project(cleaver)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp)
-add_library(gauntlet SHARED ${SOURCE_FILES} Gauntlet.cpp Gauntlet.h)
+add_library(cleaver SHARED Cleaver.cpp Cleaver.h)
 
 include_directories(
-    ../ogre/build/include
-    ../ogre/OgreMain/include
+    ../lookinglass
+    ../../ogre/build/include
+    ../../ogre/OgreMain/include
+    ../../ogre/ogredeps/include
 )
 
-target_link_libraries(lookinglass c:/dev/ogre/build/lib/libOgreMain.dll.a)
+target_link_libraries(cleaver c:/dev/ogre/build/lib/libOgreMain.dll.a)
+target_link_libraries(cleaver c:/dev/ogre/ogredeps/lib/libSDL2.dll.a)
+
+#set(output_dir ${PROJECT_SOURCE_DIR}/bin)
+#
+#set_target_properties(cleaver PROPERTIES
+#    ARCHIVE_OUTPUT_DIRECTORY "${output_dir}"
+#    LIBRARY_OUTPUT_DIRECTORY "${output_dir}"
+#    RUNTIME_OUTPUT_DIRECTORY "${output_dir}"
+#)
+
+add_custom_command(TARGET cleaver POST_BUILD
+   COMMAND ${CMAKE_COMMAND} -E copy_directory
+   ../../ogre/ogredeps/bin/Debug $<TARGET_FILE_DIR:cleaver>
+)
