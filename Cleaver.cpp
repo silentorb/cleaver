@@ -1,19 +1,24 @@
-#include "Cleaver.h"
 #include <memory>
 #include <SDL2/SDL_syswm.h>
+#include "cleaver/Cleaver.h"
 
 namespace cleaver {
 
-  void Cleaver::initialize() {
-    bool result = false;
-    try
-    {
-      Ogre::String config_file = "";
-      Ogre::String plugins_file = "";
-      Ogre::String log_file = "";
+  Cleaver::Cleaver()
+  {
+    root = new Ogre::Root("", "", "");
+  }
 
-      root = std::unique_ptr<Ogre::Root>(
-        new Ogre::Root(config_file, plugins_file, log_file));
+  Cleaver::~Cleaver(){
+    delete root;
+    root = NULL;
+  }
+
+
+  void Cleaver::start() {
+    bool result = false;
+//    try
+//    {
       {
         typedef std::vector<Ogre::String> Strings;
         Strings plugin_names;
@@ -33,6 +38,7 @@ namespace cleaver {
           {
             Ogre::String& lPluginName = (*lIter);
             bool lIsInDebugMode = OGRE_DEBUG_MODE;
+            lIsInDebugMode = true;
             if(lIsInDebugMode)
             {
               lPluginName.append("_d");
@@ -90,7 +96,7 @@ namespace cleaver {
         if( lRenderSystemList.size() == 0 )
         {
 //          MESSAGE_ERROR("Sorry, no rendersystem was found.");
-          throw std::runtime_error("Unable to initialize render system.");
+          throw std::runtime_error("Unable to start render system.");
         }
 
         Ogre::RenderSystem *lRenderSystem = lRenderSystemList[0];
@@ -123,16 +129,27 @@ namespace cleaver {
 
       root->clearEventTimes();
 
-    } catch(Ogre::Exception &e)
-    {
-//      MESSAGE_ERROR(e.what());
-      throw new std::runtime_error(e.what());
-      result = false;
-    } catch(std::exception &e)
-    {
-//      MESSAGE_ERROR(e.what());
-      throw new std::runtime_error(e.what());
-      result = false;
-    }
+//    } catch(Ogre::Exception &e)
+//    {
+////      MESSAGE_ERROR(e.what());
+////      throw new std::runtime_error(e.what());
+//      result = false;
+//    } catch(std::exception &e)
+//    {
+////      MESSAGE_ERROR(e.what());
+////      throw new std::runtime_error(e.what());
+//      result = false;
+//    }
+//    catch(...)
+//    {
+////      MESSAGE_ERROR(e.what());
+////      throw new std::runtime_error(e->what());
+////      delete e;
+//      result = false;
+//    }
+  }
+
+  void Cleaver::stop() {
+
   }
 }
