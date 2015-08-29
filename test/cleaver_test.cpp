@@ -5,31 +5,11 @@
 #include <iostream>
 #include <lookinglass/glass.h>
 
-int main( int argc, char* const argv[] )
-{
-//  int result = Catch::Session().run( argc, argv );
-  try {
-//    throw std::runtime_error("!!!!!!!!!!!");
-    cleaver::Cleaver glass = cleaver::Cleaver();
-    glass.start();
-    glass.stop();
-
-//    throw "Memory allocation failure!";
-  }
-
-  catch (std::exception &e) {
-    std::cout << e.what();
-  }
-
-  std::cin.get();
+int main(int argc, char *const argv[]) {
+  cleaver::Cleaver glass = cleaver::Cleaver();
+  glass.start();
+  while (glass.update() == 0);
+  glass.stop();
 
   return 0;
-//  return result;
 }
-
-//TEST_CASE("Test test", "[not sure what to put here]") {
-//  cleaver::Cleaver glass = cleaver::Cleaver();
-//  glass.start();
-//  REQUIRE(1 == 1);
-//  glass.stop();
-//}

@@ -14,6 +14,7 @@ namespace cleaver {
       Ogre::Root* root;
       SDL_Window *sdl_window;
       Ogre::RenderWindow *ogre_window;
+      Ogre::Viewport* viewport;
 
   public:
       Cleaver();
@@ -21,6 +22,7 @@ namespace cleaver {
 
       virtual void stop();
       virtual void start();
+      int update ();
   };
 
 }
