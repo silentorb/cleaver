@@ -4,7 +4,7 @@
 
 #include <memory>
 #include "Ogre.h"
-#include "lookinglass/glass.h"
+#include "lookinglass/Glass.h"
 #include "SDL2/SDL.h"
 
 namespace cleaver {
@@ -23,6 +23,10 @@ namespace cleaver {
       virtual void stop();
       virtual void start();
       int update ();
+      void add_element(lookinglass::Element element);
+      void delete_element(lookinglass::Element element);
+
+      Ogre::MeshPtr createColourCube();
   };
 
 }

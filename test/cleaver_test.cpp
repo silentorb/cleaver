@@ -1,9 +1,6 @@
-//#define CATCH_CONFIG_MAIN
-//#define CATCH_CONFIG_RUNNER
-//#include "catch.hpp"
 #include "cleaver/Cleaver.h"
 #include <iostream>
-#include <lookinglass/glass.h>
+#include "lookinglass/Glass.h"
 
 int main(int argc, char *const argv[]) {
   cleaver::Cleaver glass = cleaver::Cleaver();
