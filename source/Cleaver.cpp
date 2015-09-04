@@ -1,11 +1,15 @@
 #include <memory>
 #include <SDL2/SDL_syswm.h>
 #include "cleaver/Cleaver.h"
+#include "cleaver/Barracks.h"
 
 namespace cleaver {
 
   Cleaver::Cleaver() {
+    camera_index = 0;
     root = new Ogre::Root("", "", "");
+    barracks_functions[Element_Type::model] = Barracks::create_model;
+    barracks_functions[Element_Type::camera] = Barracks::create_camera;
   }
 
   Cleaver::~Cleaver() {
@@ -15,8 +19,10 @@ namespace cleaver {
 
 
   void Cleaver::start() {
+
     bool result = false;
     {
+      Ogre::LogManager::getSingleton().setLogDetail(Ogre::LL_LOW);
       typedef std::vector<Ogre::String> Strings;
       Strings plugin_names;
       plugin_names.push_back("RenderSystem_GL");
@@ -121,31 +127,19 @@ namespace cleaver {
     result = true;
 
     viewport = ogre_window->addViewport(NULL);
-    //viewport = window->addViewport(NULL);
     viewport->setOverlaysEnabled(true);
     viewport->setClearEveryFrame(true);
     viewport->setBackgroundColour(Ogre::ColourValue(0, 1, 1));
     root->clearEventTimes();
 
-    auto scene_manager = root->createSceneManager(Ogre::ST_GENERIC, "Main_Scene");
-    auto camera = scene_manager->createCamera("Cam");
-    camera->setPosition(Ogre::Vector3(0, 300, 500));
-    camera->lookAt(Ogre::Vector3(0, 0, 0));
-    camera->setNearClipDistance(5);
-    viewport->setCamera(camera);
-
+    scene_manager = root->createSceneManager(Ogre::ST_GENERIC, "Main_Scene");
     scene_manager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-    auto mesh = createColourCube();
 
-    Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().create(
-      "Test/ColourTest", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-    material->getTechnique(0)->getPass(0)->setVertexColourTracking(Ogre::TVC_AMBIENT);
-
-    Ogre::Entity *thisEntity = scene_manager->createEntity("cc", mesh->getName());
-    thisEntity->setMaterialName("Test/ColourTest");
-    Ogre::SceneNode *thisSceneNode = scene_manager->getRootSceneNode()->createChildSceneNode();
-    thisSceneNode->setPosition(-35, 0, 0);
-    thisSceneNode->attachObject(thisEntity);
+//    auto camera = scene_manager->createCamera("Cam");
+//    camera->setPosition(Ogre::Vector3(0, 300, 500));
+//    camera->lookAt(Ogre::Vector3(0, 0, 0));
+//    camera->setNearClipDistance(5);
+//    viewport->setCamera(camera);
 
     ogre_window->setActive(true);
     ogre_window->setAutoUpdated(false);
@@ -153,7 +147,7 @@ namespace cleaver {
   }
 
   void Cleaver::stop() {
-
+    ogre_window->destroy();
   }
 
   int Cleaver::update() {
@@ -309,11 +303,12 @@ namespace cleaver {
     return mesh;
   }
 
-  void Cleaver::add_element(lookinglass::Element element) {
-
+  void Cleaver::add_element(const Element_Pointer &element) {
+    elements.push_back(element);
+    barracks_functions[element->type](this, *element);
   }
 
-  void Cleaver::delete_element(lookinglass::Element element) {
-
+  void Cleaver::delete_element(const Element_Pointer &element) {
+    elements.erase(std::remove(elements.begin(), elements.end(), element), elements.end());
   }
 }

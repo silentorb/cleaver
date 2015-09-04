@@ -9,24 +9,35 @@
 
 namespace cleaver {
 
-  class Cleaver : public lookinglass::Glass {
+  class Cleaver;
+  using namespace lookinglass;
 
-      Ogre::Root* root;
+  typedef void(*Element_Delegate)(Cleaver *cleaver, const Element &element);
+
+  class Cleaver : public Glass {
+
       SDL_Window *sdl_window;
       Ogre::RenderWindow *ogre_window;
-      Ogre::Viewport* viewport;
+      std::vector<Element_Pointer> elements;
 
   public:
       Cleaver();
       ~Cleaver();
 
-      virtual void stop();
-      virtual void start();
-      int update ();
-      void add_element(lookinglass::Element element);
-      void delete_element(lookinglass::Element element);
+      void start();
+      void stop();
+      int update();
+      void add_element(const Element_Pointer &element);
+      void delete_element(const Element_Pointer &element);
 
       Ogre::MeshPtr createColourCube();
+      Ogre::Root *root;
+      Ogre::SceneManager *scene_manager;
+      Ogre::Viewport *viewport;
+      std::map<const Element*, std::string> element_map;
+      std::map<Element_Type, Element_Delegate> barracks_functions;
+
+      unsigned long camera_index;
   };
 
 }
