@@ -13,10 +13,12 @@ include_directories(
   ../../lib/Catch/include
 )
 
-set(current_target cleaver_test)
 include(../cleaver-config.cmake)
 
 target_link_libraries(cleaver_test
   mingw32
-  ${CMAKE_CURRENT_SOURCE_DIR}/../build/libcleaver.dll.a
+  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libcleaver.dll.a
 )
+#${CMAKE_CURRENT_SOURCE_DIR}/../../bin/Debug/libcleaver.dll.a
+
+message("LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}")

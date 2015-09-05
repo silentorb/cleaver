@@ -3,9 +3,9 @@
 #define _SDL_main_h
 
 #include <memory>
-#include "Ogre.h"
 #include "lookinglass/Glass.h"
-#include "SDL2/SDL.h"
+#include <vector>
+#include <map>
 
 namespace cleaver {
 
@@ -14,10 +14,10 @@ namespace cleaver {
 
   typedef void(*Element_Delegate)(Cleaver *cleaver, const Element &element);
 
+  struct Hall;
+
   class Cleaver : public Glass {
 
-      SDL_Window *sdl_window;
-      Ogre::RenderWindow *ogre_window;
       std::vector<Element_Pointer> elements;
 
   public:
@@ -30,12 +30,9 @@ namespace cleaver {
       void add_element(const Element_Pointer &element);
       void delete_element(const Element_Pointer &element);
 
-      Ogre::MeshPtr createColourCube();
-      Ogre::Root *root;
-      Ogre::SceneManager *scene_manager;
-      Ogre::Viewport *viewport;
       std::map<const Element*, std::string> element_map;
       std::map<Element_Type, Element_Delegate> barracks_functions;
+      Hall *hall;
 
       unsigned long camera_index;
   };

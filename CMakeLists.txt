@@ -7,11 +7,14 @@ add_library(cleaver SHARED
 #  ../lib/nvwa/debug_new.cpp
   source/Cleaver.cpp
   source/Barracks.cpp
-)
+  include/cleaver/Hall.h)
 
 include(cleaver-config.cmake)
 
 include_directories(
+  ${CMAKE_CURRENT_LIST_DIR}/../../ogre32/buildd/include
+  ${CMAKE_CURRENT_LIST_DIR}/../../ogre32/OgreMain/include
+  ${CMAKE_CURRENT_LIST_DIR}/../../ogre32/ogredeps/include
   ${cleaver_includes}
 )
 
